@@ -326,18 +326,30 @@ Status:
 </button>
 
 <button onclick="goHome()">
-🏠 Book Another Ticket
+ Book Another Ticket
 </button>
 
  <button onclick="cancelTicket()">
 ❌ Cancel Ticket
 </button>
 
+<button onclick="goToHome()">
+🏠 Go To Home
+</button>
+
+
 </div>
 
 <!-- EMAILJS -->
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ 
+
 
 <script type="module"> 
     import {
@@ -661,10 +673,42 @@ sendTicketEmail();
 
 /* DOWNLOAD */
 
-function downloadTicket(){
-    window.print();
-}
+ window.downloadTicket = async function () {
 
+    const { jsPDF } = window.jspdf;
+
+    const ticket =
+    document.querySelector(".ticket");
+
+    const canvas =
+    await html2canvas(ticket, {
+        scale: 2
+    });
+
+    const imgData =
+    canvas.toDataURL("image/png");
+
+    const pdf =
+    new jsPDF("p", "mm", "a4");
+
+    const pdfWidth =
+    pdf.internal.pageSize.getWidth();
+
+    const pdfHeight =
+    (canvas.height * pdfWidth) /
+    canvas.width;
+
+    pdf.addImage(
+        imgData,
+        "PNG",
+        0,
+        0,
+        pdfWidth,
+        pdfHeight
+    );
+
+    pdf.save("SriSaradhaTicket.pdf");
+};
 /* HOME */
  window.goHome = function(){
     window.location.href = "index.html";
@@ -710,11 +754,14 @@ window.downloadPDF = function(){
     window.print();
 };
 
-</script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+window.goToHome = function(){
+    window.location.href = "index.html";
+};
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
- </div>
+
+</script>
+
+</div>
 
 
 </body>
