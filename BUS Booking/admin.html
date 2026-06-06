@@ -468,10 +468,7 @@ No bookings available
 `;
 
 }
-
-bookings.forEach(b => {
-   table.innerHTML += `...`;
-});
+ 
 
 bookings.forEach(b => {
 
@@ -601,130 +598,16 @@ document.getElementById("revenueChart"),
         }
     }
 });
-/* BUS MANAGEMENT */
-
-let buses =
-JSON.parse(localStorage.getItem("buses")) || [];
-
-showBuses();
-
-function addBus(){
-
-let bus = {
-
-name:
-document.getElementById("busName").value,
-
-price:
-document.getElementById("busPrice").value,
-
-number:
-document.getElementById("busNumber").value,
-
-model:
-document.getElementById("busModel").value,
-
-capacity:
-document.getElementById("seatCapacity").value
-
-};
-
-if(bus.name === ""){
-
-alert("Enter Bus Name");
-
-return;
-
-}
-
-buses.push(bus);
-
-localStorage.setItem(
-"buses",
-JSON.stringify(buses)
-);
-
-document.getElementById("busName").value = "";
-document.getElementById("busPrice").value = "";
-document.getElementById("busNumber").value = "";
-document.getElementById("seatCapacity").value = "";
-
-showBuses();
-
-alert("Bus Added Successfully ✅");
-
-}
-
-function showBuses(){
-
-let list =
-document.getElementById("busList");
-
-list.innerHTML = "";
-
-buses.forEach((bus,index)=>{
-
-list.innerHTML += `
-
-<div style="
-background:#f8f8ff;
-padding:15px;
-margin-top:10px;
-border-radius:10px;
-">
-
-<b>${bus.name}</b><br>
-
-Bus No: ${bus.number}<br>
-
-Model: ${bus.model}<br>
-Price: ₹${bus.price}<br>
-
-Seats: ${bus.capacity}
-
-<button
-onclick="deleteBus(${index})"
-style="
-margin-top:10px;
-background:red;
-color:white;
-border:none;
-padding:8px 15px;
-border-radius:5px;
-cursor:pointer;">
-Delete
-</button>
-
-</div>
-
-`;
-
-});
-
-}
-
-function deleteBus(index){
-
-buses.splice(index,1);
-
-localStorage.setItem(
-"buses",
-JSON.stringify(buses)
-);
-
-showBuses();
-
-}
+ 
 
 /* HOME */
 
-function goHome(){
+window.goHome = function(){
 
 window.location.href="index.html";
 
 }
-
- function logout(){
+ window.logout = function(){
 
 localStorage.removeItem(
 "adminLoggedIn"
@@ -737,6 +620,110 @@ window.location.href =
 
 }
 
+// BUS MANAGEMENT
+
+let buses =
+JSON.parse(localStorage.getItem("buses")) || [];
+
+window.showBuses = function(){
+
+    let list =
+    document.getElementById("busList");
+
+    list.innerHTML = "";
+
+    buses.forEach((bus,index)=>{
+
+        list.innerHTML += `
+        <div style="
+        background:white;
+        padding:15px;
+        margin-top:10px;
+        border-radius:10px;
+        box-shadow:0 2px 8px rgba(0,0,0,.1);
+        ">
+            <h3>${bus.name}</h3>
+            <p>Bus No: ${bus.number}</p>
+            <p>Model: ${bus.model}</p>
+            <p>Price: ₹${bus.price}</p>
+            <p>Seats: ${bus.capacity}</p>
+
+            <button onclick="deleteBus(${index})"
+            style="
+            background:red;
+            color:white;
+            border:none;
+            padding:8px 12px;
+            border-radius:5px;
+            cursor:pointer;
+            ">
+            Delete
+            </button>
+        </div>
+        `;
+    });
+};
+
+window.addBus = function(){
+
+    let bus = {
+
+        name:
+        document.getElementById("busName").value,
+
+        price:
+        document.getElementById("busPrice").value,
+
+        number:
+        document.getElementById("busNumber").value,
+
+        model:
+        document.getElementById("busModel").value,
+
+        capacity:
+        document.getElementById("seatCapacity").value
+    };
+
+    if(
+        !bus.name ||
+        !bus.price ||
+        !bus.number ||
+        !bus.capacity
+    ){
+        alert("Fill all fields");
+        return;
+    }
+
+    buses.push(bus);
+
+    localStorage.setItem(
+        "buses",
+        JSON.stringify(buses)
+    );
+
+    showBuses();
+
+    document.getElementById("busName").value = "";
+    document.getElementById("busPrice").value = "";
+    document.getElementById("busNumber").value = "";
+    document.getElementById("seatCapacity").value = "";
+
+    alert("Bus Added Successfully");
+};
+
+window.deleteBus = function(index){
+
+    buses.splice(index,1);
+
+    localStorage.setItem(
+        "buses",
+        JSON.stringify(buses)
+    );
+
+    showBuses();
+};
+
+showBuses();
 
 </script>
 
