@@ -589,10 +589,9 @@ font-size:24px;
  <a href="admin-login.html">
   <span class="icon">🔐</span> Admin Login
 </a>
-  <a href="login.html">
-    <span class="icon">🚪</span> Logout
-  </a>
-
+ <a href="#" onclick="logoutUser()">
+  <span class="icon">🚪</span> Logout
+</a>
 </div>
     </div>
   </div>
@@ -866,8 +865,27 @@ window.addEventListener('click', function(e){
   }
 });
 
+function logoutUser(){
+
+  localStorage.removeItem("email");
+  localStorage.removeItem("username");
+
+  alert("Logged Out Successfully");
+
+  window.location.href = "login.html";
+}
+
 /* SEARCH */
-function doSearch(){
+ function doSearch(){
+
+  const userEmail = localStorage.getItem("email");
+
+  if(!userEmail){
+    alert("Please login first to search buses.");
+    window.location.href = "login.html";
+    return;
+  }
+
   const from = document.getElementById('fromCity').value;
   const to = document.getElementById('toCity').value;
   const date = document.getElementById('travelDate').value;
@@ -880,6 +898,7 @@ function doSearch(){
   localStorage.setItem('from', from);
   localStorage.setItem('to', to);
   localStorage.setItem('date', date);
+
   window.location.href = 'search.html';
 }
 

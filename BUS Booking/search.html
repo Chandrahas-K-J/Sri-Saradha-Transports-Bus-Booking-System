@@ -482,6 +482,11 @@ Coimbatore → Madurai
  
  <script>
 
+if(!localStorage.getItem("email")){
+    alert("Please Login First");
+    window.location.href = "login.html";
+}
+
 let buses =
 JSON.parse(localStorage.getItem("buses")) || [];
 
