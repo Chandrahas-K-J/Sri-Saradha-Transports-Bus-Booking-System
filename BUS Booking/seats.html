@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seat Selection</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    background:#ececf1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.container{
+    display:flex;
+    gap:30px;
+}
+
+.bus{
+    background:#f7f7f7;
+    padding:25px;
+    border-radius:25px;
+    width:280px;
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.top h2{
+    font-size:30px;
+    color:#333;
+}
+
+.driver{
+    font-size:38px;
+}
+
+.seats{
+    display:grid;
+    grid-template-columns:60px 60px 60px;
+    column-gap:38px;
+    row-gap:18px;
+    justify-content:center;
+}
+
+.seat{
+    width:50px;
+    height:85px;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    transition:0.3s;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.available{
+    background:#f5f5ff;
+    border:2px solid #d9d9ff;
+    color:#7d7dff;
+}
+
+.booked{
+    background:#ececec;
+    color:#999;
+    cursor:not-allowed;
+}
+
+.selected{
+    background:white;
+    border:2px solid #4c63ff;
+    color:#4c63ff;
+}
+
+.available:hover{
+    transform:scale(1.05);
+}
+
+.info{
+    margin-top:30px;
+    text-align:center;
+}
+
+.info h3{
+    margin:10px 0;
+    color:#5a5adb;
+}
+
+button{
+    margin-top:20px;
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#5a5adb;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#4747c9;
+}
+
+/* Mobile Responsive */
+
+@media screen and (max-width: 768px){
+
+body{
+padding:10px;
+}
+
+.navbar{
+padding:15px;
+flex-direction:column;
+gap:10px;
+}
+
+.logo{
+font-size:24px;
+text-align:center;
+}
+
+.route-box,
+.ticket,
+.payment-box,
+.info{
+width:100%;
+padding:20px;
+}
+
+h1{
+font-size:28px;
+}
+
+h2{
+font-size:22px;
+}
+
+button{
+width:100%;
+font-size:16px;
+}
+
+input,
+select{
+width:100%;
+}
+
+}
+.passenger-box{
+margin-top:20px;
+padding:15px;
+background:#f8f8ff;
+border-radius:15px;
+}
+
+.passenger-box input,
+.passenger-box select{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+/* Small Phones */
+
+@media screen and (max-width:480px){
+
+h1{
+font-size:22px;
+}
+
+.logo{
+font-size:20px;
+}
+
+button{
+padding:12px;
+}
+
+}
+
+@media(max-width:768px){
+
+.container{
+flex-direction:column;
+}
+
+.seat{
+width:45px;
+height:45px;
+font-size:16px;
+}
+
+.summary{
+width:100%;
+margin-top:20px;
+}
+
+.proceed-btn{
+width:100%;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="bus">
+
+<div class="top">
+<h2>Lower Deck</h2>
+<div class="driver">🛞</div>
+</div>
+
+<div class="seats" id="lower"></div>
+
+</div>
+
+<div class="bus">
+
+<div class="top">
+<h2>Upper Deck</h2>
+</div>
+
+<div class="seats" id="upper"></div>
+
+<div class="info">
+
+<h3 id="count">Selected Seats: 0</h3>
+
+<h3 id="fare">Total Fare: ₹ 0</h3>
+<div class="passenger-box">
+
+<h3>Passenger Details</h3>
+
+<input
+type="text"
+id="passengerName"
+placeholder="Passenger Name"
+required>
+
+<input
+type="number"
+id="passengerAge"
+placeholder="Age"
+required>
+
+<select id="passengerGender">
+
+<option value="">Select Gender</option>
+
+<option>Male</option>
+
+<option>Female</option>
+
+<option>Other</option>
+
+</select>
+
+</div>
+<button onclick="payment()">
+Proceed to Payment
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const lower = document.getElementById("lower");
+const upper = document.getElementById("upper");
+
+let bookings =
+JSON.parse(localStorage.getItem("bookings")) || [];
+
+let currentBus =
+localStorage.getItem("bus");
+
+let currentDate =
+localStorage.getItem("date");
+
+let ticketPrice =
+Number(localStorage.getItem("amount")) || 896;
+
+let booked = new Set();
+
+bookings.forEach(b => {
+
+    if(
+        b.bus === currentBus &&
+        b.date === currentDate
+    ){
+
+        try{
+
+            let seats = JSON.parse(b.seats);
+
+            if(Array.isArray(seats)){
+
+                seats.forEach(seat => {
+
+                    booked.add(Number(seat));
+
+                });
+
+            }
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+    }
+
+});
+
+let selected = [];
+
+function createSeat(container,num){
+
+    const seat =
+    document.createElement("div");
+
+    seat.classList.add("seat");
+
+    seat.innerText = num;
+
+    if(booked.has(num)){
+
+        seat.classList.add("booked");
+
+    }else{
+
+        seat.classList.add("available");
+
+        seat.onclick = function(){
+
+            toggleSeat(seat,num);
+
+        };
+
+    }
+
+    container.appendChild(seat);
+
+}
+
+for(let i=1;i<=15;i++){
+
+    createSeat(lower,i);
+
+}
+
+for(let i=16;i<=30;i++){
+
+    createSeat(upper,i);
+
+}
+
+function toggleSeat(seat,num){
+
+    if(selected.includes(num)){
+
+        selected =
+        selected.filter(
+            s => s !== num
+        );
+
+        seat.classList.remove("selected");
+
+        seat.classList.add("available");
+
+    }else{
+
+        selected.push(num);
+
+        seat.classList.remove("available");
+
+        seat.classList.add("selected");
+
+    }
+
+    document.getElementById("count").innerText =
+    "Selected Seats: " + selected.length;
+
+    document.getElementById("fare").innerText =
+    "Total Fare: ₹ " +
+    (selected.length * ticketPrice);
+
+}
+
+function payment(){
+
+    if(selected.length === 0){
+
+        alert("Select seats first");
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        "seats",
+        JSON.stringify(selected)
+    );
+
+    localStorage.setItem(
+        "amount",
+        selected.length * ticketPrice
+    );
+    let passenger = {
+
+name:
+document.getElementById("passengerName").value,
+
+age:
+document.getElementById("passengerAge").value,
+
+gender:
+document.getElementById("passengerGender").value
+
+};
+
+localStorage.setItem(
+"passenger",
+JSON.stringify(passenger)
+);
+
+    window.location.href =
+    "payment.html";
+
+}
+
+</script>
+
+</body>
+</html>

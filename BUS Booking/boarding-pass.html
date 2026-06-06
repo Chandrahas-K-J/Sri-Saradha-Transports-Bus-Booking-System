@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Boarding Pass</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#eef2f7;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.boarding-pass{
+    width:900px;
+    max-width:100%;
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+}
+
+/* HEADER */
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:2px solid #e5e7eb;
+    padding-bottom:20px;
+    margin-bottom:25px;
+}
+
+.company{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    width:90px;
+}
+
+.company h1{
+    color:#0a2a66;
+    font-size:38px;
+}
+
+.company p{
+    color:#666;
+    margin-top:5px;
+}
+
+/* MAIN */
+
+.pass-body{
+    display:flex;
+    justify-content:space-between;
+    gap:40px;
+}
+
+.left{
+    flex:1;
+}
+
+.passenger-name{
+    font-size:34px;
+    color:#111827;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+
+.info{
+    margin-bottom:14px;
+    font-size:20px;
+}
+
+.info b{
+    color:#0a2a66;
+}
+
+.status{
+    display:inline-block;
+    margin-top:20px;
+    background:#10b981;
+    color:white;
+    padding:12px 24px;
+    border-radius:30px;
+    font-weight:bold;
+}
+
+/* RIGHT */
+
+.right{
+    width:250px;
+    text-align:center;
+}
+
+.qr{
+    width:180px;
+    border:1px solid #ddd;
+    padding:8px;
+    background:white;
+}
+
+.seat-badge{
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    background:#0a2a66;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:34px;
+    font-weight:bold;
+    margin:20px auto;
+}
+
+/* BUTTONS */
+
+.actions{
+    margin-top:30px;
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    border:none;
+    padding:14px 22px;
+    border-radius:12px;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+    background:linear-gradient(135deg,#1fa2ff,#6c3bff);
+}
+
+.btn:hover{
+    opacity:.9;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.pass-body{
+    flex-direction:column;
+}
+
+.right{
+    width:100%;
+}
+
+.company{
+    flex-direction:column;
+    text-align:center;
+}
+
+.company h1{
+    font-size:28px;
+}
+
+.passenger-name{
+    font-size:26px;
+}
+
+.info{
+    font-size:17px;
+}
+
+.actions{
+    flex-direction:column;
+}
+
+.btn{
+    width:100%;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="boarding-pass">
+
+    <div class="header">
+
+        <div class="company">
+            <img src="images/logo.png" class="logo">
+            <div>
+                <h1>Sri Saradha Transports</h1>
+                <p>Digital Boarding Pass</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="pass-body">
+
+        <div class="left">
+
+            <div class="passenger-name" id="passengerName">
+                Passenger
+            </div>
+
+            <div class="info">
+                <b>Ticket ID:</b>
+                <span id="ticketId"></span>
+            </div>
+
+            <div class="info">
+                <b>Age:</b>
+                <span id="age"></span>
+            </div>
+
+            <div class="info">
+                <b>Gender:</b>
+                <span id="gender"></span>
+            </div>
+
+            <div class="info">
+                <b>Route:</b>
+                <span id="from"></span> →
+                <span id="to"></span>
+            </div>
+
+            <div class="info">
+                <b>Date:</b>
+                <span id="date"></span>
+            </div>
+
+            <div class="info">
+                <b>Boarding:</b>
+                <span id="boarding"></span>
+            </div>
+
+            <div class="info">
+                <b>Drop:</b>
+                <span id="drop"></span>
+            </div>
+
+            <div class="info">
+                <b>Driver:</b>
+                <span id="driver"></span>
+            </div>
+
+            <div class="info">
+                <b>Contact:</b>
+                <span id="phone"></span>
+            </div>
+
+            <div class="info">
+                <b>Departure:</b>
+                08:45 PM
+            </div>
+
+            <div class="status">
+                ✓ BOARDING APPROVED
+            </div>
+
+        </div>
+
+        <div class="right">
+
+            <img id="qrCode" class="qr">
+
+            <div class="seat-badge" id="seatBadge">
+                1
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="actions">
+
+        <button class="btn" onclick="window.print()">
+            🖨️ Print Pass
+        </button>
+
+        <button class="btn" onclick="window.location.href='tracking.html'">
+            🛰️ Track Bus
+        </button>
+
+        <button class="btn" onclick="window.location.href='index.html'">
+            🏠 Home
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+let bookings =
+JSON.parse(localStorage.getItem("bookings")) || [];
+
+let latestBooking =
+bookings.length > 0
+? bookings[bookings.length - 1]
+: null;
+
+document.getElementById("passengerName").innerText =
+latestBooking?.passenger?.name || "Passenger";
+
+document.getElementById("age").innerText =
+latestBooking?.passenger?.age || "-";
+
+document.getElementById("gender").innerText =
+latestBooking?.passenger?.gender || "-";
+
+document.getElementById("ticketId").innerText =
+localStorage.getItem("ticketId") || "SST123456";
+
+document.getElementById("from").innerText =
+localStorage.getItem("from") || "Coimbatore";
+
+document.getElementById("to").innerText =
+localStorage.getItem("to") || "Madurai";
+
+document.getElementById("date").innerText =
+localStorage.getItem("date") || "2026-06-05";
+
+document.getElementById("boarding").innerText =
+latestBooking?.boardingPoint || "Gandhipuram Bus Stand";
+
+document.getElementById("drop").innerText =
+latestBooking?.dropPoint || "Mattuthavani Bus Stand";
+
+document.getElementById("driver").innerText =
+latestBooking?.driverName || "Suresh Babu";
+
+document.getElementById("phone").innerText =
+latestBooking?.driverPhone || "+91 9123456789";
+
+let seat =
+localStorage.getItem("seats") || "9";
+
+seat = seat.replace("[","").replace("]","");
+
+document.getElementById("seatBadge").innerText =
+seat;
+
+/* QR */
+
+let qrData = `
+Sri Saradha Transports
+Passenger: ${latestBooking?.passenger?.name || "Passenger"}
+Ticket ID: ${localStorage.getItem("ticketId")}
+Route: ${localStorage.getItem("from")} → ${localStorage.getItem("to")}
+Seat: ${seat}
+Date: ${localStorage.getItem("date")}
+`;
+
+document.getElementById("qrCode").src =
+"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" +
+encodeURIComponent(qrData);
+
+</script>
+
+</body>
+</html>

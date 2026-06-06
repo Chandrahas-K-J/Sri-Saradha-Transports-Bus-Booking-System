@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f6fb;
+padding:30px;
+}
+
+h1{
+text-align:center;
+margin-bottom:30px;
+color:#333;
+}
+
+.dashboard{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:40px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+.card h2{
+font-size:18px;
+color:#666;
+margin-bottom:10px;
+}
+
+.card p{
+font-size:30px;
+font-weight:bold;
+color:#5a5adb;
+}
+
+.table-box{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+overflow-x:auto;
+margin-bottom:30px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#5a5adb;
+color:white;
+padding:12px;
+}
+
+td{
+padding:12px;
+border-bottom:1px solid #eee;
+text-align:center;
+}
+
+tr:hover{
+background:#f8f8ff;
+}
+
+.home-btn{
+margin-top:25px;
+padding:12px 25px;
+border:none;
+background:#5a5adb;
+color:white;
+border-radius:10px;
+cursor:pointer;
+font-size:16px;
+}
+
+.home-btn:hover{
+background:#4747c9;
+}
+/* Mobile Responsive */
+
+@media screen and (max-width: 768px){
+
+body{
+padding:10px;
+}
+
+.navbar{
+padding:15px;
+flex-direction:column;
+gap:10px;
+}
+
+.logo{
+font-size:24px;
+text-align:center;
+}
+
+.route-box,
+.ticket,
+.payment-box,
+.info{
+width:100%;
+padding:20px;
+}
+
+h1{
+font-size:28px;
+}
+
+h2{
+font-size:22px;
+}
+
+button{
+width:100%;
+font-size:16px;
+}
+
+input,
+select{
+width:100%;
+}
+
+}
+
+/* Small Phones */
+
+@media screen and (max-width:480px){
+
+h1{
+font-size:22px;
+}
+
+.logo{
+font-size:20px;
+}
+
+button{
+padding:12px;
+}
+
+}
+
+@media(max-width:768px){
+
+.dashboard{
+padding:15px;
+overflow-x:auto;
+}
+
+table{
+min-width:700px;
+}
+
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>🚌 Admin Dashboard</h1>
+
+<div class="dashboard">
+
+<div class="card">
+<h2>Total Bookings</h2>
+<p id="totalBookings">0</p>
+</div>
+
+<div class="card">
+<h2>Total Revenue</h2>
+<p id="totalRevenue">₹0</p>
+</div>
+
+<div class="card">
+<h2>Total Seats Sold</h2>
+<p id="totalSeats">0</p>
+</div>
+
+<div class="card">
+<h2>Currently Booked Seats</h2>
+<p id="bookedSeatsCount">0</p>
+</div>
+
+</div>
+
+<div class="table-box">
+
+<h2 style="margin-bottom:20px;">
+📋 Booking History
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Ticket ID</th>
+<th>From</th>
+<th>To</th>
+<th>Date</th>
+<th>Seats</th>
+<th>Amount</th>
+<th>Bus</th>
+<th>Payment ID</th>
+<th>Booked At</th>
+</tr>
+
+</thead>
+
+<tbody id="bookingTable">
+</tbody>
+
+</table>
+
+</div>
+<div class="table-box" style="margin-top:30px;">
+
+<h2 style="margin-bottom:20px;">
+📈 Revenue Analytics
+</h2>
+
+<canvas id="revenueChart"></canvas>
+
+</div>
+
+
+<div class="table-box" style="margin-top:30px;">
+
+<h2 style="margin-bottom:20px;">
+<div class="table-box">
+
+<h2 style="margin-bottom:20px;">
+🚌 Bus Management
+</h2>
+
+<input
+type="text"
+id="busName"
+placeholder="Bus Name"
+style="width:100%;padding:12px;margin-bottom:10px;">
+<input
+type="number"
+id="busPrice"
+placeholder="Ticket Price (₹)"
+style="width:100%;padding:12px;margin-bottom:10px;">
+
+<input
+type="text"
+id="busNumber"
+placeholder="Bus Number (TN38 AB 1234)"
+style="width:100%;padding:12px;margin-bottom:10px;">
+
+<select
+id="busModel"
+style="width:100%;padding:12px;margin-bottom:10px;">
+
+<option>Volvo AC Sleeper</option>
+<option>Mercedes-Benz Multi Axle</option>
+<option>BharatBenz Coach</option>
+<option>Scania Sleeper</option>
+<option>Ashok Leyland AC</option>
+
+</select>
+
+<input
+type="number"
+id="seatCapacity"
+placeholder="Seat Capacity"
+style="width:100%;padding:12px;margin-bottom:10px;">
+
+<button
+onclick="addBus()"
+style="
+padding:12px 20px;
+background:#5a5adb;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;">
+Add Bus
+</button>
+
+<div id="busList" style="margin-top:20px;"></div>
+
+</div>
+
+🚌 Bus Occupancy Report
+</h2>
+
+<canvas id="busOccupancyChart"></canvas>
+
+</div>
+
+<button class="home-btn" onclick="goHome()">
+🏠 Back To Home
+</button>
+
+
+<button class="home-btn"
+onclick="window.location.href='scan-ticket.html'">
+📷 Scan Ticket QR
+</button>
+
+<button class="home-btn" onclick="logout()">
+🚪 Logout
+</button>
+
+ <script type="module">
+
+    import {
+db
+} from "./firebase-config.js";
+
+import {
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+   if(
+localStorage.getItem("adminLoggedIn")
+!== "true"
+){
+alert("Admin Login Required");
+window.location.href =
+"admin-login.html";
+}
+
+/* GET DATA */
+
+const bookings = [];
+
+const querySnapshot =
+await getDocs(
+collection(db,"bookings")
+);
+
+querySnapshot.forEach((doc)=>{
+
+bookings.push(doc.data());
+
+});
+
+console.log(bookings);
+let bookedSeats =
+JSON.parse(localStorage.getItem("bookedSeats")) || [];
+
+/* TOTAL BOOKINGS */
+
+document.getElementById("totalBookings").innerHTML =
+bookings.length;
+
+/* TOTAL REVENUE */
+
+let revenue = 0;
+
+bookings.forEach(b => {
+
+revenue += Number(b.amount || 0);
+
+});
+
+document.getElementById("totalRevenue").innerHTML =
+"₹ " + revenue;
+
+/* TOTAL SEATS SOLD */
+
+let seatsSold = 0;
+
+bookings.forEach(b => {
+
+if(Array.isArray(b.seats)){
+
+seatsSold += b.seats.length;
+
+}else{
+
+try{
+
+let seats = JSON.parse(b.seats);
+
+if(Array.isArray(seats)){
+
+seatsSold += seats.length;
+
+}else{
+
+seatsSold += 1;
+
+}
+
+}catch{
+
+seatsSold += 1;
+
+}
+
+}
+
+});
+
+document.getElementById("totalSeats").innerHTML =
+seatsSold;
+
+/* BOOKED SEATS */
+ let totalBookedSeats = 0;
+
+bookings.forEach(b => {
+
+    try{
+
+        let seats = Array.isArray(b.seats)
+        ? b.seats
+        : JSON.parse(b.seats);
+
+        totalBookedSeats += seats.length;
+
+    }catch{
+
+        totalBookedSeats += 1;
+
+    }
+
+});
+
+document.getElementById("bookedSeatsCount").innerHTML =
+totalBookedSeats;
+
+/* TABLE */
+
+let table =
+document.getElementById("bookingTable");
+
+table.innerHTML = "";
+
+if(bookings.length === 0){
+
+table.innerHTML = `
+<tr>
+<td colspan="9">
+No bookings available
+</td>
+</tr>
+`;
+
+}
+
+bookings.forEach(b => {
+   table.innerHTML += `...`;
+});
+
+bookings.forEach(b => {
+
+let seatsDisplay =
+Array.isArray(b.seats)
+? b.seats.join(", ")
+: b.seats;
+
+table.innerHTML += `
+
+<tr>
+
+<td>${b.ticketId || "-"}</td>
+
+<td>${b.from || "-"}</td>
+
+<td>${b.to || "-"}</td>
+
+<td>${b.date || "-"}</td>
+
+<td>${seatsDisplay || "-"}</td>
+
+<td>₹${b.amount || 0}</td>
+
+<td>${b.bus || "-"}</td>
+
+<td>${b.paymentId || "-"}</td>
+
+<td>${b.bookedAt || "-"}</td>
+
+</tr>
+
+`;
+
+});
+/* BUS OCCUPANCY CHART */
+
+let busData = {};
+
+bookings.forEach(b => {
+
+    let busName = b.bus || "Unknown";
+
+    let seatCount = 1;
+
+    try{
+
+    let seats = Array.isArray(b.seats)
+    ? b.seats
+    : JSON.parse(b.seats);
+
+        if(Array.isArray(seats)){
+            seatCount = seats.length;
+        }
+
+    }catch{}
+
+    if(!busData[busName]){
+        busData[busName] = 0;
+    }
+
+    busData[busName] += seatCount;
+
+});
+
+new Chart(
+document.getElementById("busOccupancyChart"),
+{
+    type:"bar",
+
+    data:{
+        labels:Object.keys(busData),
+
+        datasets:[{
+            label:"Seats Occupied",
+            data:Object.values(busData),
+            borderWidth:1
+        }]
+    },
+
+    options:{
+        responsive:true,
+
+        scales:{
+            y:{
+                beginAtZero:true,
+                max:30
+            }
+        }
+    }
+});
+/* REVENUE CHART */
+
+let revenueLabels = [];
+let revenueData = [];
+
+bookings.forEach((b,index)=>{
+
+    revenueLabels.push("Booking " + (index + 1));
+
+    revenueData.push(Number(b.amount || 0));
+
+});
+
+new Chart(
+document.getElementById("revenueChart"),
+{
+    type:"bar",
+
+    data:{
+        labels:revenueLabels,
+
+        datasets:[{
+            label:"Revenue (₹)",
+            data:revenueData,
+            backgroundColor:"#5a5adb"
+        }]
+    },
+
+    options:{
+        responsive:true,
+
+        scales:{
+            y:{
+                beginAtZero:true
+            }
+        }
+    }
+});
+/* BUS MANAGEMENT */
+
+let buses =
+JSON.parse(localStorage.getItem("buses")) || [];
+
+showBuses();
+
+function addBus(){
+
+let bus = {
+
+name:
+document.getElementById("busName").value,
+
+price:
+document.getElementById("busPrice").value,
+
+number:
+document.getElementById("busNumber").value,
+
+model:
+document.getElementById("busModel").value,
+
+capacity:
+document.getElementById("seatCapacity").value
+
+};
+
+if(bus.name === ""){
+
+alert("Enter Bus Name");
+
+return;
+
+}
+
+buses.push(bus);
+
+localStorage.setItem(
+"buses",
+JSON.stringify(buses)
+);
+
+document.getElementById("busName").value = "";
+document.getElementById("busPrice").value = "";
+document.getElementById("busNumber").value = "";
+document.getElementById("seatCapacity").value = "";
+
+showBuses();
+
+alert("Bus Added Successfully ✅");
+
+}
+
+function showBuses(){
+
+let list =
+document.getElementById("busList");
+
+list.innerHTML = "";
+
+buses.forEach((bus,index)=>{
+
+list.innerHTML += `
+
+<div style="
+background:#f8f8ff;
+padding:15px;
+margin-top:10px;
+border-radius:10px;
+">
+
+<b>${bus.name}</b><br>
+
+Bus No: ${bus.number}<br>
+
+Model: ${bus.model}<br>
+Price: ₹${bus.price}<br>
+
+Seats: ${bus.capacity}
+
+<button
+onclick="deleteBus(${index})"
+style="
+margin-top:10px;
+background:red;
+color:white;
+border:none;
+padding:8px 15px;
+border-radius:5px;
+cursor:pointer;">
+Delete
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+function deleteBus(index){
+
+buses.splice(index,1);
+
+localStorage.setItem(
+"buses",
+JSON.stringify(buses)
+);
+
+showBuses();
+
+}
+
+/* HOME */
+
+function goHome(){
+
+window.location.href="index.html";
+
+}
+
+ function logout(){
+
+localStorage.removeItem(
+"adminLoggedIn"
+);
+
+alert("Logged Out Successfully");
+
+window.location.href =
+"admin-login.html";
+
+}
+
+
+</script>
+
+</body>
+</html>
+

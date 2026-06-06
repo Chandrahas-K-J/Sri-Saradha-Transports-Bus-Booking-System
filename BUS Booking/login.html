@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Login to Sri Saradha Transports and book premium bus tickets online.">
+<title>Login – Sri Saradha Transports</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+ 
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  overflow-x:hidden;
+  background:#f5f7fb;
+}
+
+/* LEFT PANEL */
+
+.left-panel{
+  width:48%;
+  background:linear-gradient(135deg,#0a1f4e 0%,#1e1060 50%,#0d1a3a 100%);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:60px;
+  position:relative;
+  overflow:hidden;
+}
+
+.left-panel::before{
+  content:'';
+  position:absolute;
+  width:400px;
+  height:400px;
+  background:radial-gradient(circle,rgba(108,59,255,.3),transparent 70%);
+  top:-100px;
+  right:-100px;
+}
+
+.left-panel::after{
+  content:'';
+  position:absolute;
+  width:300px;
+  height:300px;
+  background:radial-gradient(circle,rgba(45,169,255,.15),transparent 70%);
+  bottom:0;
+  left:0;
+}
+
+.brand{
+  text-align:center;
+  z-index:1;
+}
+
+.brand-icon{
+  font-size:72px;
+  margin-bottom:24px;
+}
+
+.brand h1{
+  font-size:42px;
+  font-weight:900;
+  color:white;
+  margin-bottom:16px;
+}
+
+ .brand h1 span{
+  background:linear-gradient(90deg,#2da9ff,#8b5cf6);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+}
+
+.brand p{
+  color:rgba(255,255,255,.75);
+  line-height:1.8;
+  font-size:17px;
+}
+
+.features{
+  margin-top:50px;
+  width:100%;
+  max-width:350px;
+}
+
+.feature{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.1);
+  color:white;
+  padding:16px 20px;
+  border-radius:14px;
+  margin-bottom:14px;
+  font-size:15px;
+}
+
+/* RIGHT PANEL */
+
+.right-panel{
+  flex:1;
+  background:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px;
+}
+
+.login-form{
+  width:100%;
+  max-width:430px;
+}
+
+/* COMPANY HEADER */
+
+.company-header{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.company-header img{
+  width:100px;
+  height:auto;
+  display:block;
+  margin:0 auto 12px;
+}
+
+.company-header h2{
+  font-size:34px;
+  color:#04142f;
+  margin-bottom:6px;
+  font-weight:800;
+}
+
+.company-header p{
+  color:#64748b;
+  font-size:16px;
+}
+
+/* LOGIN TITLE */
+
+.login-form h1{
+  font-size:42px;
+  font-weight:900;
+  margin-bottom:10px;
+  color:#04142f;
+}
+
+.subtitle{
+  color:#64748b;
+  margin-bottom:35px;
+  font-size:16px;
+}
+
+/* FORM */
+
+.form-group{
+  margin-bottom:20px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:8px;
+  font-size:12px;
+  font-weight:700;
+  color:#64748b;
+  text-transform:uppercase;
+}
+
+.form-group input{
+  width:100%;
+  padding:15px;
+  border:2px solid #e2e8f0;
+  border-radius:12px;
+  font-size:16px;
+  outline:none;
+}
+
+.form-group input:focus{
+  border-color:#6c3bff;
+}
+
+.forgot-link{
+  text-align:right;
+  margin-bottom:25px;
+}
+
+.forgot-link a{
+  color:#6c3bff;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.submit-btn{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#6c3bff,#2da9ff);
+  color:white;
+  font-size:18px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.links-row{
+  text-align:center;
+  margin-top:25px;
+}
+
+.links-row a{
+  color:#6c3bff;
+  font-weight:700;
+  text-decoration:none;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  padding:15px 20px;
+  border-radius:12px;
+  color:white;
+  display:none;
+  z-index:9999;
+}
+
+.toast.success{
+  background:#10b981;
+}
+
+.toast.error{
+  background:#ef4444;
+}
+
+.toast.show{
+  display:block;
+}
+
+ /* MOBILE */
+ @media(max-width:768px){
+
+.container{
+    flex-direction:column;
+}
+
+.left-panel,
+.right-panel{
+    width:100%;
+}
+
+.left-panel{
+    min-height:300px;
+    padding:30px 20px;
+}
+
+}
+
+ @media(max-width:768px){
+
+.left-logo{
+    width:100px;
+    height:100px;
+}
+
+}
+ @media(max-width:820px){
+
+  body{
+    flex-direction:column;
+    background:#f5f7fb;
+  }
+
+  .right-panel{
+    order:1;
+    width:100%;
+    padding:20px;
+  }
+
+  .left-panel{
+    order:2;
+    width:100%;
+    min-height:auto;
+    padding:30px 20px;
+  }
+
+  .login-form{
+    max-width:100%;
+  }
+
+}
+
+  .login-form{
+    background:white;
+    width:100%;
+    max-width:450px;
+    margin:auto;
+    padding:30px;
+    border-radius:24px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+  }
+
+  .company-header{
+    margin-bottom:25px;
+  }
+
+  .company-header img{
+    width:80px;
+  }
+
+  .company-header h2{
+    font-size:24px;
+  }
+
+  .company-header p{
+    font-size:14px;
+  }
+
+  .login-form h1{
+    font-size:32px;
+  }
+
+  .subtitle{
+    font-size:15px;
+  }
+
+
+@media(max-width:480px){
+
+  body{
+    padding:15px;
+  }
+
+  .login-form{
+    padding:24px;
+  }
+
+  .company-header img{
+    width:70px;
+  }
+
+  .company-header h2{
+    font-size:20px;
+  }
+
+  .company-header p{
+    font-size:13px;
+  }
+
+  .login-form h1{
+    font-size:28px;
+  }
+
+  .subtitle{
+    font-size:14px;
+  }
+
+  .form-group input{
+    padding:14px;
+    font-size:15px;
+  }
+
+  .submit-btn{
+    font-size:16px;
+    padding:14px;
+  }
+}
+
+.left-logo{
+    width:120px;
+    height:120px;
+    object-fit:contain;
+    margin-bottom:20px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="left-panel">
+  <div class="brand">
+     <img
+src="images/logo.png"
+alt="Sri Saradha Logo"
+class="left-logo">
+    <h1>Sri Saradha<br><span>Transports</span></h1>
+    <p>South India's most trusted premium<br>bus booking platform.</p>
+  </div>
+  <div class="features">
+    <div class="feature"><span>🛡️</span> Secure & verified payments</div>
+    <div class="feature"><span>📩</span> Instant ticket on email</div>
+    <div class="feature"><span>💺</span> Real-time seat selection</div>
+    <div class="feature"><span>⚡</span> 60-second booking</div>
+  </div>
+</div>
+
+<div class="right-panel">
+  <div class="login-form">
+
+    <div class="company-header">
+    <img src="images/logo.png" alt="Sri Saradha Transports">
+    <h2>Sri Saradha Transports</h2>
+    <p>Premium Bus Booking System</p>
+</div>
+    <h1>Sign in to your account</h1>
+    <p class="subtitle">Enter your credentials to continue booking</p>
+
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="email" placeholder="you@example.com">
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter your password">
+    </div>
+
+    <div class="forgot-link">
+      <a href="forgot.html">Forgot password?</a>
+    </div>
+
+    <button class="submit-btn" id="loginBtn" onclick="login()">
+      Sign In →
+    </button>
+
+    <div class="links-row">
+      <p>Don't have an account? <a href="signup.html">Create one</a></p>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBZMZ7gB91oOKMF2PywsJHj_Sr4AsThZm4",
+  authDomain: "srisaradhabus.firebaseapp.com",
+  projectId: "srisaradhabus",
+  storageBucket: "srisaradhabus.firebasestorage.app",
+  messagingSenderId: "1068667302044",
+  appId: "1:1068667302044:web:972971c838a8fdbd9a7d59",
+  measurementId: "G-X5WZVD38XS"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+function showToast(msg, type=''){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(()=>t.className='toast', 3500);
+}
+
+window.login = function(){
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const btn = document.getElementById('loginBtn');
+
+  if(!email || !password){
+    showToast('Please enter email and password', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+
+  signInWithEmailAndPassword(auth, email, password)
+  .then((cred)=>{
+    const user = cred.user;
+
+    if(!user.emailVerified){
+      showToast('Please verify your email first. Sending verification…', 'error');
+      sendEmailVerification(user);
+      btn.disabled = false;
+      btn.textContent = 'Sign In →';
+      return;
+    }
+
+    localStorage.setItem('email', email);
+    localStorage.setItem('username', user.displayName || email.split('@')[0]);
+
+    showToast('Login successful! Redirecting…', 'success');
+    setTimeout(()=>window.location.href='index.html', 1200);
+  })
+  .catch((err)=>{
+    btn.disabled = false;
+    btn.textContent = 'Sign In →';
+    const msgs = {
+      'auth/user-not-found': 'No account found with this email.',
+      'auth/wrong-password': 'Incorrect password. Try again.',
+      'auth/invalid-email': 'Invalid email address.',
+      'auth/too-many-requests': 'Too many attempts. Try again later.'
+    };
+    showToast(msgs[err.code] || err.message, 'error');
+  });
+}
+
+</script>
+
+</body>
+</html>

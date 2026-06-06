@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Payment</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.payment-box{
+background:white;
+padding:30px;
+border-radius:20px;
+width:90%;
+max-width:400px;
+text-align:center;
+}
+
+h1{
+    color:#5a5adb;
+}
+
+.details{
+    margin:20px 0;
+    font-size:20px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    margin-top:15px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    margin-top:20px;
+    border:none;
+    background:#5a5adb;
+    color:white;
+    font-size:18px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#4747c9;
+}
+
+/* Mobile Responsive */
+
+@media screen and (max-width: 768px){
+
+body{
+padding:10px;
+}
+
+.navbar{
+padding:15px;
+flex-direction:column;
+gap:10px;
+}
+
+.logo{
+font-size:24px;
+text-align:center;
+}
+
+.route-box,
+.ticket,
+.payment-box,
+.info{
+width:100%;
+padding:20px;
+}
+
+h1{
+font-size:28px;
+}
+
+h2{
+font-size:22px;
+}
+
+button{
+width:100%;
+font-size:16px;
+}
+
+input,
+select{
+width:100%;
+}
+
+}
+
+/* Small Phones */
+
+@media screen and (max-width:480px){
+
+h1{
+font-size:22px;
+}
+
+.logo{
+font-size:20px;
+}
+
+button{
+padding:12px;
+}
+
+}
+
+@media(max-width:768px){
+
+.payment-box{
+width:95%;
+padding:20px;
+}
+
+h1{
+font-size:24px;
+}
+
+input{
+font-size:16px;
+}
+
+button{
+width:100%;
+}
+
+}
+
+@media(max-width:768px){
+
+body{
+padding:20px;
+height:auto;
+}
+
+.payment-box{
+width:100%;
+padding:25px;
+}
+
+h1{
+font-size:28px;
+}
+
+.details{
+font-size:18px;
+}
+
+input{
+font-size:15px;
+padding:12px;
+}
+
+button{
+font-size:18px;
+padding:14px;
+}
+
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="payment-box">
+
+<h1>Payment Gateway 💳</h1>
+
+<div class="details">
+
+<p>
+Seats:
+<span id="seats"></span>
+</p>
+
+<p>
+Total Amount:
+₹ <span id="amount"></span>
+</p>
+
+</div>
+
+<input type="text" placeholder="Card Number">
+
+<input type="text" placeholder="Card Holder Name">
+
+<input type="text" placeholder="Expiry Date">
+
+<input type="password" placeholder="CVV">
+
+<button id="payBtn">
+Pay Now
+</button>
+
+</div>
+
+ <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script type="module"> 
+
+import {
+db,
+collection,
+addDoc
+} from "./firebase-config.js";
+
+const seats =
+JSON.parse(localStorage.getItem("seats")) || [];
+
+const amount =
+localStorage.getItem("amount") || 0;
+
+document.getElementById("seats").innerHTML =
+seats.join(", ");
+
+document.getElementById("amount").innerHTML =
+amount;
+
+function payNow(){
+
+var options = {
+
+key:"rzp_test_SxCQGsN3Z71nHM",
+
+amount:Number(amount) * 100,
+
+currency:"INR",
+
+name:"Sri Saradha Transports",
+
+description:"Bus Ticket Booking",
+
+image:"https://cdn-icons-png.flaticon.com/512/61/61231.png",
+handler: async function(response){
+
+alert("Payment Successful ✅");
+
+localStorage.setItem(
+"payment_id",
+response.razorpay_payment_id
+);
+
+/* DRIVER DETAILS */
+
+const drivers = [
+
+{
+name:"Suresh Babu",
+phone:"+91 9123456789"
+},
+
+{
+name:"Ramesh Kumar",
+phone:"+91 9876543210"
+},
+
+{
+name:"Vijay Kumar",
+phone:"+91 9345678901"
+}
+
+];
+
+const randomDriver =
+drivers[
+Math.floor(Math.random()*drivers.length)
+];
+
+/* BOARDING POINTS */
+
+const boardingPoints = {
+
+"Coimbatore":"Gandhipuram Bus Stand",
+
+"Chennai":"Koyambedu Bus Terminus",
+
+"Madurai":"Mattuthavani Bus Stand",
+
+"Bangalore":"Majestic Bus Station",
+
+"Salem":"New Bus Stand",
+
+"Trichy":"Central Bus Stand",
+
+"Hyderabad":"MGBS",
+
+"Kochi":"Vytilla Hub",
+
+"Mumbai":"Dadar Bus Station",
+
+"Delhi":"Kashmere Gate ISBT"
+
+};
+
+let from =
+localStorage.getItem("from");
+
+let to =
+localStorage.getItem("to");
+
+let eta = "7 Hours";
+
+if(from === "Coimbatore" && to === "Bangalore"){
+    eta = "6 Hours";
+}
+else if(from === "Coimbatore" && to === "Chennai"){
+    eta = "9 Hours";
+}
+else if(from === "Coimbatore" && to === "Madurai"){
+    eta = "4 Hours";
+}
+else if(from === "Coimbatore" && to === "Trichy"){
+    eta = "3 Hours";
+}
+else if(from === "Coimbatore" && to === "Salem"){
+    eta = "2 Hours";
+}
+
+/* BOOKING OBJECT */
+ 
+let booking = {
+
+ticketId:
+"SS" + Date.now(),
+
+status:"ACTIVE",
+
+
+driverLat:11.0168,
+
+driverLng:76.9558,
+
+from:from,
+
+to:to,
+passenger:
+JSON.parse(
+localStorage.getItem("passenger")
+),
+
+date:
+localStorage.getItem("date"),
+
+seats:
+localStorage.getItem("seats"),
+
+amount:
+localStorage.getItem("amount"),
+
+bus:
+localStorage.getItem("bus"),
+
+paymentId:
+response.razorpay_payment_id,
+
+
+
+driverName:
+randomDriver.name,
+
+driverPhone:
+randomDriver.phone,
+
+boardingPoint:
+boardingPoints[from] || from,
+
+dropPoint:
+boardingPoints[to] || to,
+
+eta: eta,
+
+bookedAt:
+new Date().toLocaleString()
+};
+
+let bookings =
+JSON.parse(
+localStorage.getItem("bookings")
+) || [];
+
+bookings.push(booking);
+
+localStorage.setItem(
+"bookings",
+JSON.stringify(bookings)
+);
+
+/* SAVE TO FIREBASE */
+
+await addDoc(
+collection(db,"bookings"),
+booking
+);
+
+alert("Booking Saved To Firebase ✅");
+
+window.location.href =
+"ticket.html";
+ 
+
+},
+
+theme:{
+color:"#5a5adb"
+}
+
+};
+
+var rzp =
+new Razorpay(options);
+
+rzp.open();
+
+}
+ document.getElementById("payBtn")
+.addEventListener("click", payNow);
+
+</script>
+
+</body>
+</html>

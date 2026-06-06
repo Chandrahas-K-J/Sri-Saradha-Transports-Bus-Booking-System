@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sri Saradha Buses</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:#f1f3f8;
+padding:40px;
+}
+
+/* TOPBAR */
+
+.topbar{
+background:#07142d;
+height:70px;
+border-radius:20px 20px 0 0;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 30px;
+}
+
+.logo{
+font-size:30px;
+font-weight:bold;
+color:#38b6ff;
+}
+
+.back-btn{
+background:linear-gradient(90deg,#7f3dff,#6b2fff);
+padding:15px 30px;
+border-radius:0 0 0 18px;
+color:white;
+text-decoration:none;
+font-size:22px;
+}
+
+/* ROUTE */
+
+.route-box{
+background:white;
+width:90%;
+margin:40px auto;
+padding:45px;
+border-radius:30px;
+text-align:center;
+box-shadow:0 5px 20px rgba(0,0,0,0.08);
+}
+
+.route-box h1{
+font-size:55px;
+color:#07142d;
+margin-bottom:20px;
+}
+
+.route-box h2{
+font-size:42px;
+color:#07142d;
+}
+
+/* BUS CARD */
+
+.bus-card{
+background:white;
+width:90%;
+margin:40px auto;
+padding:45px;
+border-radius:35px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 5px 20px rgba(0,0,0,0.08);
+flex-wrap:wrap;
+}
+
+/* LEFT */
+
+.left{
+width:35%;
+}
+
+.bus-name{
+font-size:45px;
+font-weight:bold;
+color:#07142d;
+margin-bottom:15px;
+}
+
+.bus-type{
+font-size:30px;
+color:#6b42ff;
+margin-bottom:25px;
+}
+
+.rating{
+background:#16c784;
+color:white;
+display:inline-block;
+padding:12px 20px;
+border-radius:12px;
+font-size:28px;
+font-weight:bold;
+}
+
+/* CENTER */
+
+.center{
+text-align:center;
+}
+
+.time{
+font-size:60px;
+font-weight:bold;
+color:black;
+margin-bottom:15px;
+}
+
+.duration{
+font-size:28px;
+color:gray;
+}
+
+/* RIGHT */
+
+.right{
+text-align:right;
+}
+
+.price{
+font-size:52px;
+font-weight:bold;
+color:#07142d;
+margin-bottom:10px;
+}
+
+.seats{
+font-size:26px;
+color:green;
+margin-bottom:25px;
+}
+
+.select-btn{
+background:linear-gradient(90deg,#38b6ff,#7f3dff);
+border:none;
+padding:18px 40px;
+border-radius:15px;
+font-size:24px;
+font-weight:bold;
+color:white;
+cursor:pointer;
+}
+
+.select-btn:hover{
+opacity:0.9;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.bus-card{
+flex-direction:column;
+gap:30px;
+text-align:center;
+}
+
+.left,
+.center,
+.right{
+width:100%;
+text-align:center;
+}
+
+.route-box h1{
+font-size:36px;
+}
+
+.route-box h2{
+font-size:28px;
+}
+
+.bus-name{
+font-size:32px;
+}
+
+.time{
+font-size:40px;
+}
+
+}
+/* Mobile Responsive */
+
+@media screen and (max-width: 768px){
+
+body{
+padding:10px;
+}
+
+.navbar{
+padding:15px;
+flex-direction:column;
+gap:10px;
+}
+
+.logo{
+font-size:24px;
+text-align:center;
+}
+
+.route-box,
+.ticket,
+.payment-box,
+.info{
+width:100%;
+padding:20px;
+}
+
+h1{
+font-size:28px;
+}
+
+h2{
+font-size:22px;
+}
+
+button{
+width:100%;
+font-size:16px;
+}
+
+input,
+select{
+width:100%;
+}
+
+}
+
+/* Small Phones */
+
+@media screen and (max-width:480px){
+
+h1{
+font-size:22px;
+}
+
+.logo{
+font-size:20px;
+}
+
+button{
+padding:12px;
+}
+
+}
+@media(max-width:768px){
+
+.bus-card{
+padding:20px;
+}
+
+.bus-name{
+font-size:22px;
+}
+
+.bus-type{
+font-size:16px;
+}
+
+.select-btn{
+width:100%;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+<div class="logo">
+Sri Saradha 🚌
+</div>
+
+<a href="index.html" class="back-btn">
+← Back
+</a>
+
+</div>
+
+<!-- ROUTE -->
+
+<div class="route-box">
+
+<h1>
+Coimbatore → Madurai
+</h1>
+
+<h2>
+30 May 2026
+</h2>
+
+</div>
+
+<!-- BUS 1 -->
+
+<div class="bus-card">
+
+<div class="left">
+
+<div class="bus-name">
+Saradha Volvo Multi Axle Sleeper
+</div>
+
+<div class="bus-type">
+AC Sleeper • 2+1
+</div>
+
+<div class="rating">
+4.8 ★
+</div>
+
+</div>
+
+<div class="center">
+
+<div class="time">
+10:30 PM
+</div>
+
+<div class="duration">
+7h 15m
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="price">
+₹1499
+</div>
+
+<div class="seats">
+12 Seats Left
+</div>
+
+<button class="select-btn"
+onclick="goSeats()">
+Select Seats
+</button>
+
+</div>
+
+</div>
+
+<!-- BUS 2 -->
+
+<div class="bus-card">
+
+<div class="left">
+
+<div class="bus-name">
+Saradha Scania Luxury Sleeper
+</div>
+
+<div class="bus-type">
+AC Sleeper • Premium
+</div>
+
+<div class="rating">
+4.9 ★
+</div>
+
+</div>
+
+<div class="center">
+
+<div class="time">
+09:45 PM
+</div>
+
+<div class="duration">
+6h 50m
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="price">
+₹1699
+</div>
+
+<div class="seats">
+8 Seats Left
+</div>
+
+<button class="select-btn"
+onclick="goSeats()">
+Select Seats
+</button>
+
+</div>
+
+</div>
+
+<!-- BUS 3 -->
+
+<div class="bus-card">
+
+<div class="left">
+
+<div class="bus-name">
+Saradha BharatBenz Premium Coach
+</div>
+
+<div class="bus-type">
+AC Seater • Luxury
+</div>
+
+<div class="rating">
+4.7 ★
+</div>
+
+</div>
+
+<div class="center">
+
+<div class="time">
+08:15 PM
+</div>
+
+<div class="duration">
+7h 30m
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="price">
+₹1299
+</div>
+
+<div class="seats">
+15 Seats Left
+</div>
+
+<button class="select-btn"
+onclick="goSeats()">
+Select Seats
+</button>
+
+</div>
+
+</div>
+
+<!-- BUS 4 -->
+
+<div class="bus-card">
+
+<div class="left">
+
+<div class="bus-name">
+Saradha Mercedes-Benz Business Class
+</div>
+
+<div class="bus-type">
+AC Sleeper • Ultra Luxury
+</div>
+
+<div class="rating">
+5.0 ★
+</div>
+
+</div>
+
+<div class="center">
+
+<div class="time">
+11:00 PM
+</div>
+
+<div class="duration">
+6h 40m
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="price">
+₹1899
+</div>
+
+<div class="seats">
+5 Seats Left
+</div>
+
+<button class="select-btn"
+onclick="goSeats()">
+Select Seats
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+function goSeats(){
+
+window.location.href="seats.html";
+
+}
+
+</script>
+
+</body>
+</html>

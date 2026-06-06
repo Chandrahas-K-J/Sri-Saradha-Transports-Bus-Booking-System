@@ -1,0 +1,291 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Ticket Verification</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f6fb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:20px;
+}
+
+.scanner-container{
+    background:white;
+    width:800px;
+    max-width:100%;
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+h1{
+    color:#0a2a66;
+    margin-bottom:20px;
+}
+
+button{
+    background:#0a2a66;
+    color:white;
+    border:none;
+    padding:15px 30px;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+    margin-bottom:20px;
+}
+
+button:hover{
+    background:#123b87;
+}
+
+#reader{
+    width:350px;
+    margin:20px auto;
+}
+
+.result-box{
+    margin-top:20px;
+    padding:20px;
+    background:#f8f9ff;
+    border-radius:15px;
+    text-align:left;
+}
+
+.verified{
+    color:green;
+    font-weight:bold;
+}
+
+.invalid{
+    color:red;
+    font-weight:bold;
+}
+
+p{
+    margin:10px 0;
+}
+
+@media(max-width:768px){
+
+    .scanner-container{
+        padding:20px;
+    }
+
+    #reader{
+        width:100%;
+    }
+
+}
+
+</style>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+</head>
+
+<body>
+
+<div class="scanner-container">
+
+    <h1>🚌 Sri Saradha QR Verification</h1>
+
+    <button onclick="startScanner()">
+        Scan Ticket QR
+    </button>
+
+    <div id="reader"></div>
+
+    <div id="result" class="result-box">
+        Waiting for scan...
+    </div>
+
+</div>
+
+ <script type="module">
+
+    import {
+db
+} from "./firebase-config.js";
+
+import {
+collection,
+query,
+where,
+getDocs,
+doc,
+updateDoc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+ async function verifyTicket(ticketId){
+
+const q = query(
+collection(db,"bookings"),
+where("ticketId","==",ticketId)
+);
+
+const querySnapshot = await getDocs(q);
+
+if(querySnapshot.empty){
+
+document.getElementById("result").innerHTML = `
+<div style="color:red;">
+❌ Invalid Ticket
+</div>
+`;
+
+return;
+}
+
+for(const documentData of querySnapshot.docs){
+
+let data = documentData.data();
+
+/* CHECK IF ALREADY USED */
+
+if(data.status === "USED"){
+
+document.getElementById("result").innerHTML = `
+<div style="color:red;">
+❌ Ticket Already Used
+</div>
+`;
+
+return;
+}
+
+/* CHECK IF CANCELLED */
+
+if(data.status === "CANCELLED"){
+
+document.getElementById("result").innerHTML = `
+<div style="color:red;">
+❌ Ticket Cancelled
+</div>
+`;
+
+return;
+}
+
+/* MARK AS USED */
+
+await updateDoc(
+doc(db,"bookings",documentData.id),
+{
+status:"USED"
+}
+);
+
+/* SHOW VERIFIED RESULT */
+
+document.getElementById("result").innerHTML = `
+
+<div style="
+padding:20px;
+background:#e8fff0;
+border-radius:10px;
+">
+
+<h3>✅ Ticket Verified</h3>
+
+<p><b>Ticket ID:</b> ${data.ticketId}</p>
+
+<p><b>Passenger:</b> ${data.passenger.name}</p>
+
+<p><b>From:</b> ${data.from}</p>
+
+<p><b>To:</b> ${data.to}</p>
+
+<p><b>Date:</b> ${data.date}</p>
+
+<p><b>Seats:</b> ${data.seats}</p>
+
+<p><b>Payment ID:</b> ${data.paymentId}</p>
+
+<p style="color:green;">
+Status: USED
+</p>
+
+</div>
+
+`;
+
+}
+
+}
+    let isAdmin =
+localStorage.getItem("adminLoggedIn");
+
+if(isAdmin !== "true"){
+
+    alert("Access Denied");
+
+    window.location.href =
+    "admin-login.html";
+
+}
+
+ function startScanner(){
+
+    document.getElementById("result").innerHTML =
+    "📷 Camera Started...";
+
+    const html5QrCode =
+    new Html5Qrcode("reader");
+
+    html5QrCode.start(
+
+        { facingMode:"environment" },
+
+        {
+            fps:10,
+            qrbox:250
+        },
+
+        function(decodedText){
+
+            html5QrCode.stop();
+
+            verifyTicket(decodedText);
+
+        },
+
+        function(errorMessage){
+            // Ignore scan errors
+        }
+
+    ).catch(err => {
+
+        document.getElementById("result").innerHTML =
+
+        `<h2 class="invalid">
+        Camera Permission Denied
+        </h2>`;
+
+    });
+
+}
+
+verifyTicket("SS1780719385637");
+
+window.startScanner = startScanner;
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>User Profile</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background:#f5f7fb;
+}
+
+.container{
+    width:90%;
+    max-width:500px;
+    margin:60px auto;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+    text-align:center;
+}
+
+.profile-img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    margin-bottom:20px;
+}
+
+h1{
+    color:#0f172a;
+}
+
+.info{
+    margin-top:30px;
+    text-align:left;
+}
+
+.info p{
+    font-size:18px;
+    margin:15px 0;
+}
+
+button{
+    margin-top:30px;
+    padding:15px 30px;
+    border:none;
+    border-radius:10px;
+    background:#7c3aed;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+
+/* Mobile Responsive */
+
+@media screen and (max-width: 768px){
+
+body{
+padding:10px;
+}
+
+.navbar{
+padding:15px;
+flex-direction:column;
+gap:10px;
+}
+
+.logo{
+font-size:24px;
+text-align:center;
+}
+
+.route-box,
+.ticket,
+.payment-box,
+.info{
+width:100%;
+padding:20px;
+}
+
+h1{
+font-size:28px;
+}
+
+h2{
+font-size:22px;
+}
+
+button{
+width:100%;
+font-size:16px;
+}
+
+input,
+select{
+width:100%;
+}
+
+}
+
+/* Small Phones */
+
+@media screen and (max-width:480px){
+
+h1{
+font-size:22px;
+}
+
+.logo{
+font-size:20px;
+}
+
+button{
+padding:12px;
+}
+
+}
+
+@media(max-width:768px){
+
+.profile-card{
+width:95%;
+padding:20px;
+}
+
+.profile-img{
+width:100px;
+height:100px;
+}
+
+button{
+width:100%;
+}
+
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<img
+class="profile-img"
+src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+
+<h1>User Profile</h1>
+
+<div class="info">
+
+<p>
+<b>Name:</b>
+<span id="name"></span>
+</p>
+
+<p>
+<b>Email:</b>
+<span id="email"></span>
+</p>
+
+</div>
+
+<button onclick="goHome()">
+Back to Home
+</button>
+
+</div>
+
+<script>
+
+const email =
+localStorage.getItem("userEmail");
+
+document.getElementById("email")
+.innerText = email;
+
+document.getElementById("name")
+.innerText = email.split("@")[0];
+
+function goHome(){
+
+window.location.href="index.html";
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ticket Confirmation</title>
+
+ <style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.ticket{
+    width:850px;
+    max-width:100%;
+    background:#fff;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.2);
+    border-top:8px solid #0a2a66;
+}
+
+/* HEADER */
+
+.ticket-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    padding-bottom:15px;
+    border-bottom:2px solid #e5e7eb;
+}
+
+.company-details{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.company-details div{
+    display:flex;
+    flex-direction:column;
+}
+
+.logo-img{
+    width:90px;
+    height:auto;
+}
+
+.logo-img{
+    width:90px;
+    height:auto;
+}
+
+.company-details h2{
+    color:#0a2a66;
+    font-size:30px;
+    margin-bottom:5px;
+}
+
+.company-details p{
+    color:#666;
+    font-size:15px;
+}
+
+.qr-box img{
+    width:120px;
+    height:120px;
+    border:1px solid #ddd;
+    padding:5px;
+    background:white;
+}
+
+/* STATUS */
+
+.status-badge{
+    width:fit-content;
+    margin:15px auto;
+    background:#10b981;
+    color:white;
+    padding:10px 25px;
+    border-radius:30px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* TABLE */
+
+.ticket-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+.ticket-table td{
+    border:1px solid #d1d5db;
+    padding:14px;
+    font-size:16px;
+}
+
+.ticket-table td:first-child{
+    width:35%;
+    background:#f8fafc;
+    font-weight:700;
+    color:#0a2a66;
+}
+
+/* BUTTONS */
+
+.action-buttons{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px;
+    margin-top:25px;
+}
+
+button{
+    border:none;
+    padding:14px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#1fa2ff,#6c3bff);
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+/* PRINT */
+
+@media print{
+
+    body{
+        background:white;
+        padding:0;
+    }
+
+    .ticket{
+        box-shadow:none;
+        border:none;
+        width:100%;
+    }
+
+    .action-buttons{
+        display:none;
+    }
+
+    .status-badge{
+        background:#10b981 !important;
+        color:white !important;
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .ticket{
+        padding:20px;
+    }
+
+    .ticket-top{
+        flex-direction:column;
+        text-align:center;
+        gap:15px;
+    }
+
+    .company-details{
+        flex-direction:column;
+    }
+
+    .company-details h2{
+        font-size:24px;
+    }
+
+    .qr-box img{
+        width:100px;
+        height:100px;
+    }
+
+    .ticket-table td{
+        font-size:14px;
+        padding:10px;
+    }
+
+    .action-buttons{
+        grid-template-columns:1fr;
+    }
+}
+
+@media print {
+
+    body{
+        background:white !important;
+        padding:0 !important;
+        margin:0 !important;
+    }
+
+    .ticket{
+        width:100% !important;
+        max-width:100% !important;
+        padding:15px !important;
+        box-shadow:none !important;
+        border:none !important;
+        page-break-inside:avoid;
+    }
+
+    .action-buttons{
+        display:none !important;
+    }
+
+    button{
+        display:none !important;
+    }
+
+    .ticket-table td{
+        padding:8px !important;
+        font-size:12px !important;
+    }
+
+    .logo-img{
+        width:60px !important;
+    }
+
+    .qr-box img{
+        width:80px !important;
+        height:80px !important;
+    }
+
+    @page{
+        size:A4;
+        margin:8mm;
+    }
+}
+
+</style>
+
+</head>
+ <body>
+
+<div class="ticket">
+
+    <div class="ticket-top">
+
+     <div class="company-details">
+
+    <img src="images/logo.png" class="logo-img">
+
+    <div>
+        <h2>Sri Saradha Transports</h2>
+        <p>Premium Bus Booking System</p>
+    </div>
+
+</div>
+
+    <div class="qr-box">
+        <img id="qrCode">
+    </div>
+
+</div>
+<p>
+Status:
+<span id="status"></span>
+</p>
+
+
+
+ <div class="status-badge">
+✅ BOOKING CONFIRMED
+</div>
+ 
+
+ <table class="ticket-table">
+<tr><td>Ticket ID</td><td id="ticketId"></td></tr>
+<tr><td>Passenger</td><td id="passengerName"></td></tr>
+<tr><td>Age</td><td id="passengerAge"></td></tr>
+<tr><td>Gender</td><td id="passengerGender"></td></tr>
+<tr><td>From</td><td id="from"></td></tr>
+<tr><td>To</td><td id="to"></td></tr>
+<tr><td>Date</td><td id="date"></td></tr>
+<tr><td>Bus</td><td id="bus"></td></tr>
+<tr><td>Seats</td><td id="seats"></td></tr>
+<tr><td>Boarding</td><td id="boarding"></td></tr>
+<tr><td>Drop</td><td id="drop"></td></tr>
+<tr><td>Driver</td><td id="driverName"></td></tr>
+<tr><td>Contact</td><td id="driverPhone"></td></tr>
+<tr><td>Amount</td><td>₹ <span id="amount"></span></td></tr>
+</table>
+ 
+ <div class="action-buttons">
+
+ <button onclick="downloadTicket()">
+📄 Download PDF
+</button>
+
+<button onclick="window.print()">
+🖨️ Print Ticket
+</button>
+
+<button onclick="trackBus()">
+🛰️ Track Bus
+</button>
+<button onclick="window.location.href='boarding-pass.html'">
+🎫 View Boarding Pass
+</button>
+
+<button onclick="goHome()">
+🏠 Book Another Ticket
+</button>
+
+ <button onclick="cancelTicket()">
+❌ Cancel Ticket
+</button>
+
+</div>
+
+<!-- EMAILJS -->
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script type="module"> 
+    import {
+db
+} from "./firebase-config.js";
+
+import {
+collection,
+query,
+where,
+getDocs,
+doc,
+updateDoc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+emailjs.init("xTfOjr8c6-Evy8ilT");
+ window.cancelTicket = async function(){
+
+let ticketId =
+document.getElementById("ticketId").innerText;
+
+const q = query(
+collection(db,"bookings"),
+where("ticketId","==",ticketId)
+);
+
+const snapshot =
+await getDocs(q);
+
+snapshot.forEach(async(d)=>{
+
+await updateDoc(
+doc(db,"bookings",d.id),
+{
+status:"CANCELLED"
+}
+);
+
+document.getElementById("status").innerHTML =
+"CANCELLED";
+
+
+});
+
+alert("Ticket Cancelled Successfully");
+
+location.reload();
+
+}
+
+/* TRACK BUS */
+
+ window.trackBus = function(){
+    window.location.href = "tracking.html";
+};
+/* GET DATA */
+
+let from =
+localStorage.getItem("from") || "Coimbatore";
+
+let to =
+localStorage.getItem("to") || "Madurai";
+
+let date =
+localStorage.getItem("date") || "30 May 2026";
+
+let amount =
+localStorage.getItem("amount") || "1499";
+
+let bus =
+localStorage.getItem("bus") || "Saradha Volvo AC Sleeper";
+
+/* SEATS */
+
+let seatsData =
+localStorage.getItem("seats");
+
+let seats = [];
+
+try{
+    seats = JSON.parse(seatsData);
+}
+catch{
+    seats = seatsData;
+}
+
+if(!seats){
+    seats = ["U12"];
+}
+
+/* USER */
+
+let userName =
+localStorage.getItem("username") || "Chandru";
+
+let userEmail =
+localStorage.getItem("email");
+
+if(!userEmail){
+    userEmail = "harishtj23@gmail.com";
+}
+
+/* DISPLAY BASIC DETAILS */
+
+document.getElementById("from").innerHTML = from;
+document.getElementById("to").innerHTML = to;
+document.getElementById("date").innerHTML = date;
+document.getElementById("amount").innerHTML = amount;
+document.getElementById("bus").innerHTML = bus;
+
+document.getElementById("seats").innerHTML =
+Array.isArray(seats)
+? seats.join(", ")
+: seats;
+
+/* BOOKINGS */
+
+let bookings =
+JSON.parse(localStorage.getItem("bookings")) || [];
+
+let latestBooking =
+bookings.length > 0
+? bookings[bookings.length - 1]
+: null;
+if(latestBooking){
+
+    if(!latestBooking.boardingStatus){
+
+        latestBooking.boardingStatus =
+        "NOT_BOARDED";
+
+        localStorage.setItem(
+            "bookings",
+            JSON.stringify(bookings)
+        );
+    }
+
+}
+
+/* TICKET ID */
+let ticketNumber =
+latestBooking?.ticketId ||
+"SST" + Date.now().toString().slice(-8);
+
+document.getElementById("ticketId").innerHTML =
+ticketNumber;
+
+document.getElementById("status").innerHTML =
+latestBooking?.status || "ACTIVE";
+
+localStorage.setItem(
+    "ticketId",
+    ticketNumber
+);
+
+/* DRIVER + BOARDING */
+
+if(latestBooking){
+    if(latestBooking.passenger){
+
+document.getElementById("passengerName").innerHTML =
+latestBooking.passenger.name;
+
+document.getElementById("passengerAge").innerHTML =
+latestBooking.passenger.age;
+
+document.getElementById("passengerGender").innerHTML =
+latestBooking.passenger.gender;
+
+}
+
+document.getElementById("driverName").innerHTML =
+latestBooking.driverName || "Ramesh Kumar";
+
+document.getElementById("driverPhone").innerHTML =
+latestBooking.driverPhone || "+91 9876543210";
+
+document.getElementById("boarding").innerHTML =
+latestBooking.boardingPoint || "Gandhipuram Bus Stand";
+
+document.getElementById("drop").innerHTML =
+latestBooking.dropPoint || "Majestic Bus Stand";
+
+}else{
+
+document.getElementById("driverName").innerHTML =
+"Ramesh Kumar";
+
+document.getElementById("driverPhone").innerHTML =
+"+91 9876543210";
+
+document.getElementById("boarding").innerHTML =
+"Gandhipuram Bus Stand";
+
+document.getElementById("drop").innerHTML =
+"Majestic Bus Stand";
+
+}
+
+/* QR CODE */
+
+ let qrData = JSON.stringify({
+
+    ticketId: ticketNumber,
+
+    passenger:
+    document.getElementById("passengerName").innerText,
+
+    age:
+    document.getElementById("passengerAge").innerText,
+
+    gender:
+    document.getElementById("passengerGender").innerText,
+
+    from: from,
+
+    to: to,
+
+    date: date,
+
+    seat:
+    Array.isArray(seats)
+    ? seats.join(", ")
+    : seats,
+
+    bus: bus,
+
+    amount: amount,
+
+    boarding:
+    document.getElementById("boarding").innerText,
+
+    drop:
+    document.getElementById("drop").innerText,
+
+    status:
+    latestBooking?.boardingStatus ||
+    "NOT_BOARDED"
+
+});
+
+document.getElementById("qrCode").src =
+"https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
+encodeURIComponent(qrData);
+
+/* EMAIL */
+
+function sendTicketEmail(){
+
+let trackingLink =
+window.location.origin +
+window.location.pathname.replace(
+"ticket.html",
+"tracking.html"
+);
+
+emailjs.send(
+
+"service_s5wtcvw",
+
+"template_dow9pas",
+
+{
+
+to_email:userEmail,
+
+user_name:userName,
+
+bus:bus,
+
+route:from + " → " + to,
+
+date:date,
+
+seat:Array.isArray(seats)
+? seats.join(", ")
+: seats,
+
+amount:amount,
+
+ticket_id:ticketNumber,
+tracking_link: trackingLink,
+
+driver_name:
+latestBooking?.driverName || "Driver",
+
+driver_phone:
+latestBooking?.driverPhone || "N/A",
+
+boarding_point:
+latestBooking?.boardingPoint || from,
+
+drop_point:
+latestBooking?.dropPoint || to,
+
+eta:
+latestBooking?.eta || "4 Hours"
+
+
+},
+
+"xTfOjr8c6-Evy8ilT"
+
+)
+
+.then(function(){
+
+console.log("Email Sent");
+
+})
+
+.catch(function(error){
+
+console.log(error);
+
+});
+
+}
+
+sendTicketEmail();
+
+/* DOWNLOAD */
+
+function downloadTicket(){
+    window.print();
+}
+
+/* HOME */
+ window.goHome = function(){
+    window.location.href = "index.html";
+};
+
+
+window.trackBus = function(){
+    window.location.href = "tracking.html";
+};
+
+window.goHome = function(){
+    window.location.href = "index.html";
+};
+
+window.cancelTicket = async function(){
+
+    let ticketId =
+    document.getElementById("ticketId").innerText;
+
+    const q = query(
+        collection(db,"bookings"),
+        where("ticketId","==",ticketId)
+    );
+
+    const snapshot = await getDocs(q);
+
+    snapshot.forEach(async(d)=>{
+
+        await updateDoc(
+            doc(db,"bookings",d.id),
+            {
+                status:"CANCELLED"
+            }
+        );
+
+    });
+
+    alert("Ticket Cancelled Successfully ❌");
+    location.reload();
+};
+
+window.downloadPDF = function(){
+    window.print();
+};
+
+</script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ </div>
+
+
+</body>
+
+</html>

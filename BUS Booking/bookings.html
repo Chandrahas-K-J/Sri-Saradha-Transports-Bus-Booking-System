@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Bookings</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f7fb;
+}
+
+.container{
+    width:90%;
+    max-width:1000px;
+    margin:50px auto;
+}
+
+h1{
+    text-align:center;
+    color:#071633;
+    margin-bottom:40px;
+}
+
+.booking{
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    margin-bottom:20px;
+    box-shadow:0 10px 20px rgba(0,0,0,0.1);
+    border-left:6px solid #7c3aed;
+}
+
+.booking p{
+    margin:10px 0;
+    font-size:18px;
+}
+
+.btn{
+    margin-top:15px;
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    color:white;
+    cursor:pointer;
+    margin-right:10px;
+    font-size:15px;
+}
+
+.track{
+    background:#10b981;
+}
+
+.cancel{
+    background:#ef4444;
+}
+
+.home{
+    background:#7c3aed;
+}
+
+.ticket{
+    background:#2563eb;
+}
+
+button:hover{
+    opacity:0.9;
+}
+/* Mobile Responsive */
+
+@media screen and (max-width: 768px){
+
+body{
+padding:10px;
+}
+
+.navbar{
+padding:15px;
+flex-direction:column;
+gap:10px;
+}
+
+.logo{
+font-size:24px;
+text-align:center;
+}
+
+.route-box,
+.ticket,
+.payment-box,
+.info{
+width:100%;
+padding:20px;
+}
+
+h1{
+font-size:28px;
+}
+
+h2{
+font-size:22px;
+}
+
+button{
+width:100%;
+font-size:16px;
+}
+
+input,
+select{
+width:100%;
+}
+
+}
+
+/* Small Phones */
+
+@media screen and (max-width:480px){
+
+h1{
+font-size:22px;
+}
+
+.logo{
+font-size:20px;
+}
+
+button{
+padding:12px;
+}
+
+}
+
+@media(max-width:768px){
+
+.booking-card{
+padding:15px;
+}
+
+.booking-card h2{
+font-size:20px;
+}
+
+.booking-card p{
+font-size:14px;
+}
+
+button{
+width:100%;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎟️ My Bookings</h1>
+
+<div id="bookingList"></div>
+
+<button class="btn home" onclick="goHome()">
+🏠 Back To Home
+</button>
+
+</div>
+
+<script>
+
+const bookingList =
+document.getElementById("bookingList");
+
+let bookings =
+JSON.parse(localStorage.getItem("bookings")) || [];
+
+if(bookings.length === 0){
+
+bookingList.innerHTML = `
+
+<div class="booking">
+
+<h3>No Bookings Found</h3>
+
+<p>Book a ticket to see it here.</p>
+
+</div>
+
+`;
+
+}
+
+bookings.forEach((data,index) => {
+
+bookingList.innerHTML += `
+
+<div class="booking">
+
+<p><b>Ticket ID:</b> ${data.ticketId || "N/A"}</p>
+
+<p><b>From:</b> ${data.from}</p>
+
+<p><b>To:</b> ${data.to}</p>
+
+<p><b>Date:</b> ${data.date}</p>
+
+<p><b>Seats:</b> ${data.seats}</p>
+
+<p><b>Amount:</b> ₹${data.amount}</p>
+
+<p><b>Bus:</b> ${data.bus}</p>
+<p><b>ETA:</b> ${data.eta}</p>
+
+<p><b>Payment ID:</b> ${data.paymentId || "-"}</p>
+
+<p><b>Booked At:</b> ${data.bookedAt || "-"}</p>
+
+<button
+class="btn track"
+onclick="trackBus()">
+
+🛰️ Track Bus
+
+</button>
+
+<button
+class="btn ticket"
+onclick="viewTicket('${data.ticketId}')">
+
+🎫 View Ticket
+
+</button>
+
+<button
+class="btn cancel"
+onclick="cancelTicket(${index})">
+
+❌ Cancel Ticket
+
+</button>
+
+</div>
+
+`;
+
+});
+
+function trackBus(){
+
+window.location.href = "tracking.html";
+
+}
+
+function viewTicket(ticketId){
+
+localStorage.setItem(
+"selectedTicketId",
+ticketId
+);
+
+window.location.href = "ticket.html";
+
+}
+
+function cancelTicket(index){
+
+if(!confirm("Are you sure you want to cancel this ticket?")){
+
+return;
+
+}
+
+bookings.splice(index,1);
+
+localStorage.setItem(
+"bookings",
+JSON.stringify(bookings)
+);
+
+alert("Ticket Cancelled Successfully ❌");
+
+location.reload();
+
+}
+
+function goHome(){
+
+window.location.href = "index.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
